@@ -1,36 +1,36 @@
 # Create a Neural Network
 
-Now let's look how to create a simple convolution network, which is called LeNet, in Gluon. We import the neural network package from `gluon`, and also the weight initialization package.
+Now let's look how to create neural networks in Gluo. We import the neural network `nn` package from `gluon`.
 
-```{.python .input  n=30}
+```{.python .input  n=1}
 from mxnet import nd
 from mxnet.gluon import nn
 ```
 
 ## Create a layer
-We frist create a dense layer with 2 output units. 
+We frist create a dense layer with 2 output units.
 
-```{.python .input  n=31}
+```{.python .input  n=2}
 layer = nn.Dense(2)
 layer
 ```
 
 Then initialize its weight with the default initialization method, which draws random values uniformly from $[-0.7, -0.7]$
 
-```{.python .input}
+```{.python .input  n=3}
 layer.initialize()
 ```
 
 Now we create a $(3,4)$ shape random input `x` and feed into the layer to compute the output.
 
-```{.python .input  n=32}
+```{.python .input  n=4}
 x = nd.random.uniform(-1,1,(3,4))
 layer(x)
 ```
 
 As can been seen we got a $(3,2)$ shape output. Note that we didn't specify the input size of `layer` (though we can specify it with the arugment `in_units=4` here), the system will automatic infer it during the first time we feed in data, and create and initialize the weights. So we can access the weight after the first forward:
 
-```{.python .input  n=33}
+```{.python .input  n=5}
 layer.weight.data()
 ```
 
@@ -41,7 +41,7 @@ To create a network, we can implement a subclass of `nn.Block` and implement two
 - `__init__` create the layers
 - `forward` define the forward function.
 
-```{.python .input  n=4}
+```{.python .input  n=6}
 class LeNet(nn.Block):
     def __init__(self, **kwargs):
         # invoke nn.Block's __init__ method
@@ -88,7 +88,7 @@ net = LeNet()
 net    
 ```
 
-The usage of `LeNet` is simliar to `nn.Dense`. In fact, `nn.Dense` is a subclass of `nn.Block` as well. The following codes show how to create an instance, initialize the weights and run the forward method. 
+The usage of `LeNet` is simliar to `nn.Dense`. In fact, `nn.Dense` is a subclass of `nn.Block` as well. The following codes show how to create an instance, initialize the weights and run the forward method.
 
 ```{.python .input  n=8}
 net.initialize()
@@ -99,18 +99,25 @@ y = net(x)
 y.shape
 ```
 
+Access the first convolution layer's weight and first dense layer's bias.
+
+```{.python .input  n=11}
+(net.conv1.weight.data().shape, 
+ net.dense1.bias.data().shape)
+```
+
 ## A shorter way with `nn.Sequential`
 
-We have the freedom to write complext forward function with the `nn.Block` approach, including using arbitury functions in the `nd` package, printing intermediate results, and using Python's control flow such as `if-else` and `for`.
+We have the freedom to write complex forward function with the `nn.Block` approach, including using arbitury functions in the `nd` package, printing intermediate results, and using Python's control flow such as `if-else` and `for`.
 
-If the network forward function is simply envoking the layers one-by-one, we can use `nn.Sequential` to make the codes shorter. Let's reimplement the above `LeNet`. 
+If the network forward function is simply envoking the layers one-by-one, we can use `nn.Sequential` to make the codes shorter. Let's reimplement the above `LeNet`.
 
-```{.python .input  n=10}
+```{.python .input  n=13}
 net = nn.Sequential()
 # Creating layers in a name scope.
 with net.name_scope():
     # Chain a sequence of layers. Note that we can only add 
-    # layers in the `nn` package, namely subclass of `nn.Block`
+    # subclass of `nn.Block`, which includes all layers in the `nn` package.
     net.add(
         # We absorb the activation layer into Conv2D
         nn.Conv2D(channels=6, kernel_size=5, activation='relu'),
@@ -126,27 +133,31 @@ with net.name_scope():
 net
 ```
 
-`nn.Sequential` will automatically generate a `forward` method that calls the added layers sequentially. 
+`nn.Sequential` will automatically generate a `forward` method that calls the added layers sequentially.
 
-```{.python .input  n=12}
+```{.python .input  n=14}
 net.initialize()
 y = net(x)
 y.shape
 ```
 
-## Mix `nn.Block` and `nn.Sequential`. 
+We can use `[]` to index a particular layer
 
-As mentioned before, `nn.Block` is the base class for a neural network block.
+```{.python .input  n=15}
+(net[0], net[-1])
+```
 
-- In `nn.Block` approach, we can create `nn.Sequential` class in the `__init__` method
-- In `nn.Sequential` approach, we can add a `nn.Block` subclass 
+## A mixed approach
 
+In Gluon, no matter it is a single layer such as `nn.Dense`, or a complete neural network such as `net`, it shares the same base class `nn.Block`. We can flexibly glue them together. For example, the following example shows that how we can construct a neural work with a mixed usage of `nn.Block` and `nn.Sequential`. 
 
 ```{.python .input}
 class MixMLP(nn.Block):
     def __init__(self, **kwargs):
         super(MixMLP, self).__init__(**kwargs)
         with self.name_scope():
+            # `nn.Sequential` is a subclass of `nn.Block`, it will 
+            # be reconginzed by Gluon
             self.blk = nn.Sequential()
             # Already within a name scope, no need to create
             # another scope.
@@ -162,6 +173,7 @@ net = nn.Sequential()
 with net.name_scope():
     net.add(
         nn.Dense(5),
+        # `add` supports any subclass of `nn.Block`
         MixMLP(),
         nn.Dense(8)
     )
