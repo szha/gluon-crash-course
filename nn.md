@@ -93,7 +93,7 @@ The usage of `LeNet` is simliar to `nn.Dense`. In fact, `nn.Dense` is a subclass
 ```{.python .input  n=8}
 net.initialize()
 # Input shape is (batch_size, RGB_channels, height, width)
-x = nd.random.uniform(-1, 1, (4,3,28,28))
+x = nd.random.uniform(-1, 1, (4,1,28,28))
 # Equal to call `net.forward(x)`
 y = net(x)
 y.shape
@@ -149,7 +149,7 @@ We can use `[]` to index a particular layer
 
 ## A mixed approach
 
-In Gluon, no matter it is a single layer such as `nn.Dense`, or a complete neural network such as `net`, it shares the same base class `nn.Block`. We can flexibly glue them together. For example, the following example shows that how we can construct a neural work with a mixed usage of `nn.Block` and `nn.Sequential`. 
+In Gluon, no matter it is a single layer such as `nn.Dense`, or a complete neural network such as `net`, it shares the same base class `nn.Block`. We can flexibly glue them together. For example, the following example shows that how we can construct a neural work with a mixed usage of `nn.Block` and `nn.Sequential`.
 
 ```{.python .input}
 class MixMLP(nn.Block):
