@@ -122,7 +122,7 @@ def transform(data, label):
 Now we can implement the complete training loop.
 
 ```{.python .input  n=10}
-for epoch in range(1):
+for epoch in range(10):
     train_loss, train_acc, valid_acc = 0., 0., 0.
     tic = time()
     for data, label in train_data:
