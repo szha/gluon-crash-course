@@ -1,0 +1,5 @@
+*.jpg
+*.json
+*.params
+.ipynb_checkpoints/*
+*.txt
