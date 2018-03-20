@@ -3,3 +3,6 @@
 *.params
 .ipynb_checkpoints/*
 *.txt
+*.ipynb
+build/_build/*
+build/*.md

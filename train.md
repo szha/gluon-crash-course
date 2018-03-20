@@ -80,12 +80,12 @@ with net.name_scope():
         nn.MaxPool2D(pool_size=2, strides=2),
         nn.Conv2D(channels=16, kernel_size=3, activation='relu'),
         nn.MaxPool2D(pool_size=2, strides=2),
-        nn.Flatten(),        
+        nn.Flatten(),
         nn.Dense(120, activation="relu"),
         nn.Dense(84, activation="relu"),
         nn.Dense(10)
     )
-net.initialize(init=init.Xavier())    
+net.initialize(init=init.Xavier())
 ```
 
 Besides the neural network, we need to define the loss function and optimization method for training. We will use  standard softmax cross entropy loss for classification problems. It first performs softmax on the output to obtain the predicted probability, and then compare the label with cross entropy.
@@ -101,9 +101,9 @@ trainer = gluon.Trainer(net.collect_params(),
                         'sgd', {'learning_rate': 0.1})
 ```
 
-The `trainer` is created with all parameters (both weights and gradients) in `net`, later on, we only need to call the `step` method to update its weights. 
+The `trainer` is created with all parameters (both weights and gradients) in `net`, later on, we only need to call the `step` method to update its weights.
 
-## Train 
+## Train
 
 We create two auxiliary functions before training. Even though both are supported by built-in functions in Gluon, we found it's straightforward to implement them from scratch. One calculates the model accuracy, the other transforms the data into `(batch, channel, height, weight)` format and normalize its values.
 
@@ -111,7 +111,7 @@ We create two auxiliary functions before training. Even though both are supporte
 def acc(output, label):
     # output: (batch, num_output) ndarray
     # label: (batch, ) ndarray
-    return (output.argmax(axis=1)==label).mean().asscalar() 
+    return (output.argmax(axis=1)==label).mean().asscalar()
 
 def transform(data, label):
     # data: (batch, height, weight, channel) ndarray
@@ -122,7 +122,7 @@ def transform(data, label):
 Now we can implement the complete training loop.
 
 ```{.python .input  n=10}
-for epoch in range(10):
+for epoch in range(1):
     train_loss, train_acc, valid_acc = 0., 0., 0.
     tic = time()
     for data, label in train_data:
@@ -134,18 +134,18 @@ for epoch in range(10):
         loss.backward()
         # update parameters
         trainer.step(batch_size)
-        # calculate traing metrics 
+        # calculate traing metrics
         train_loss += loss.mean().asscalar()
         train_acc += acc(output, label)
 
     # calculate validation accuracy
     for data, label in valid_data:
-        data, label = transform(data, label)        
+        data, label = transform(data, label)
         valid_acc += acc(net(data), label)
-        
+
     print("Epoch %d: Loss: %.3f, Train acc %.3f, Test acc %.3f, Time %.1f sec" % (
-        epoch, train_loss/len(train_data), 
-        train_acc/len(train_data), 
+        epoch, train_loss/len(train_data),
+        train_acc/len(train_data),
         valid_acc/len(valid_data), time()-tic))
 ```
 
