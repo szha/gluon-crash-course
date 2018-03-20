@@ -1,4 +1,7 @@
-# gluon-crashcourse
+# A 60min crash course to Gluon
+
+
+
 
 Stage repo, will merge to mxnet once ready.
 

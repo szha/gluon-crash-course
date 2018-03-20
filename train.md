@@ -70,7 +70,7 @@ valid_data = gluon.data.DataLoader(mnist_valid, batch_size, shuffle=False)
 
 ## Define the model
 
-We reimplement the same LeNet introduced before. One difference here is that we changed the weight initialization method to `Xavier`, which is a popular choice for deep convolutional neural networks. 
+We reimplement the same LeNet introduced before. One difference here is that we changed the weight initialization method to `Xavier`, which is a popular choice for deep convolutional neural networks.
 
 ```{.python .input  n=6}
 net = nn.Sequential()
@@ -88,13 +88,13 @@ with net.name_scope():
 net.initialize(init=init.Xavier())    
 ```
 
-Besides the neural network, we need to define the loss function and optimization method for training. We will use  standard softmax cross entropy loss for classification problems. It first performs softmax on the output to obtain the predicted probability, and then compare the label with cross entropy. 
+Besides the neural network, we need to define the loss function and optimization method for training. We will use  standard softmax cross entropy loss for classification problems. It first performs softmax on the output to obtain the predicted probability, and then compare the label with cross entropy.
 
 ```{.python .input  n=7}
 softmax_cross_entropy = gluon.loss.SoftmaxCrossEntropyLoss()
 ```
 
-The optimization method we picked is the standard stochastic gradient descent with constant learning rate 0.1. 
+The optimization method we picked is the standard stochastic gradient descent with constant learning rate 0.1.
 
 ```{.python .input  n=8}
 trainer = gluon.Trainer(net.collect_params(),
@@ -119,7 +119,7 @@ def transform(data, label):
     return data.transpose((0,3,1,2)).astype('float32')/255, label.astype('float32')
 ```
 
-Now we can implement the complete training loop. 
+Now we can implement the complete training loop.
 
 ```{.python .input  n=10}
 for epoch in range(10):

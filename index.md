@@ -13,5 +13,5 @@ This tutorial assume readers knows bascial concepts about ML. If not, then refer
 - [Training](./train.md) [15min]
 - [Predict with the pre-trained model](./predict.md) [5min]
 - [Use GPUs](./use_gpus.md) [10min]
-
+- [relation to mxnet symbol](./)
 (the structure is simliar to pytorch tutorial, we may want to ask pytorch http://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html. the contents are simplified from the straight dope)
