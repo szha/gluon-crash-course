@@ -7,6 +7,9 @@ We’ll start by introducing `NDArray`s, MXNet’s primary tool for storing and 
 To get started, let's import the `ndarray` package (shorten for `nd`) from MXNet.
 
 ```{.python .input  n=1}
+# If MXNet is not installed. Uncomment the following line
+# !pip install mxnet
+
 from mxnet import nd
 ```
 
