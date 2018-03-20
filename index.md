@@ -18,6 +18,7 @@ Contents of this course:
 
 .. toctree::
    :maxdepth: 1
+   :numbered:
 
    ndarray
    nn
