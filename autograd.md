@@ -1,6 +1,6 @@
-# Automatic differentation with `autograd`
+# Automatic differentiation with `autograd`
 
-We train models to get better and better as a function of experience. Usually, getting better means minimizing a loss function. To achieve this goal, we often iteratively compute the gradient of the loss with respect to weights and then update the weights acordingly. While the gradient calculations are straightforward through chain rule, for complex models, working it out by hand can be a pain.
+We train models to get better and better as a function of experience. Usually, getting better means minimizing a loss function. To achieve this goal, we often iteratively compute the gradient of the loss with respect to weights and then update the weights accordingly. While the gradient calculations are straightforward through chain rule, for complex models, working it out by hand can be a pain.
 
 Before diving deep into the model training, let's go through how MXNet’s autograd package expedites this work by automatically calculating derivatives. 
 
@@ -48,7 +48,7 @@ x.grad
 
 Sometimes we want to write dynamic programs, namely the execution depends on some real time values. MXNet will record the execution trace and compute the gradient as well.
 
-Consider the following function `f`, it doubles the inputs until it's norm reaches to 1000. And then select one element depends on the sum of its elements. 
+Consider the following function `f`, it doubles the inputs until it's norm reaches to 1000. And then select one element depends on the sum of its elements.
 
 ```{.python .input}
 def f(a):
@@ -62,7 +62,7 @@ def f(a):
     return c
 ```
 
-We record the trace and feed in a random value 
+We record the trace and feed in a random value
 
 ```{.python .input}
 a = nd.random.uniform(shape=2)
