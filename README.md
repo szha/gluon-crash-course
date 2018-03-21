@@ -1,4 +1,4 @@
-# A 60min crash course to Gluon
+# A 60-min crash course on Gluon
 
 
 
