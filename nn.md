@@ -1,4 +1,4 @@
-# Create a Neural Network
+# Create a neural network
 
 Now let's look how to create neural networks in Gluon. We first import the neural network `nn` package from `gluon`.
 

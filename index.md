@@ -1,4 +1,4 @@
-# A 60 minutes Gluon crash course
+# A 60-minute Gluon Crash Course
 
 This crash course aims to provide a quick overview of how to use Gluon, the
 imperative interface of MXNet. It will teach
@@ -6,7 +6,7 @@ imperative interface of MXNet. It will teach
 1. the basic usage of each component
 2. training a basic neural network to predict images.
 
-This course assumes readers have basic knowledge about machine learning and
+This course assumes that readers have basic knowledge about machine learning and
 neural networks. Otherwise please refer to
 [this excellent hands-on tutorials](http://gluon.mxnet.io/) to learn deep
 learning from scratch.
