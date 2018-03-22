@@ -22,14 +22,14 @@ Then initialize its weights with the default initialization method, which draws 
 layer.initialize()
 ```
 
-In order to compute the output, or called forward, we create a $(3,4)$ shape random input `x` and feed into the layer.
+We create a $(3,4)$ shape random input `x` and feed into the layer to compute the output. This is often called a forward pass in neural network. 
 
 ```{.python .input  n=4}
 x = nd.random.uniform(-1,1,(3,4))
 layer(x)
 ```
 
-As can be seen, we got a $(3,2)$ shape output. Note that we didn't specify the input size of `layer` before (though we can specify it with the argument `in_units=4` here), the system will automatically infer it during the first time we feed in data, create and initialize the weights. So we can access the weight after the first forward:
+As can be seen, we got a $(3,2)$ shape output. Note that we didn't specify the input size of `layer` before (though we can specify it with the argument `in_units=4` here), the system will automatically infer it during the first time we feed in data, create and initialize the weights. So we can access the weight after the first forward pass:
 
 ```{.python .input  n=5}
 layer.weight.data()

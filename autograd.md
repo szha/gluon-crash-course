@@ -11,34 +11,33 @@ from mxnet import nd
 from mxnet import autograd
 ```
 
-As a toy example, let’s say that we are interested in differentiating a function $f = 2 x^2$ with respect to parameter $x$. We can start by assigning an initial value of $x$.
+As a toy example, let’s say that we are interested in differentiating a function $f(x) = 2 x^2$ with respect to parameter $x$. We can start by assigning an initial value of $x$.
 
 ```{.python .input  n=3}
 x = nd.array([[1, 2], [3, 4]])
 x
 ```
 
-Once we compute the gradient of $f$ with respect to $x$, we’ll need a place to store it. In MXNet, we can tell an NDArray that we plan to store a gradient by invoking its `attach_grad` method.
+Once we compute the gradient of $f(x)$ with respect to $x$, we’ll need a place to store it. In MXNet, we can tell an NDArray that we plan to store a gradient by invoking its `attach_grad` method.
 
 ```{.python .input  n=6}
 x.attach_grad()
 ```
 
-Now we’re going to define the function $f$. To let MXNet store $f$ so that we can compute gradients later, we need to put the definition inside a `autograd.record()` scope.
+Now we’re going to define the function $y=f(x)$. To let MXNet store $y$ so that we can compute gradients later, we need to put the definition inside a `autograd.record()` scope.
 
 ```{.python .input  n=7}
 with autograd.record():
-    y = x * 2
-    z = y * x
+    y = 2 * x * x
 ```
 
-Let’s backprop by calling `z.backward()`. When $z$ has more than one entry, `z.backward()` is equivalent to `z.sum().backward()`.
+Let’s backprop by calling `y.backward()`. When $y$ has more than one entry, `y.backward()` is equivalent to `y.sum().backward()`.
 
 ```{.python .input  n=8}
-z.backward()
+y.backward()
 ```
 
-Now, let’s see if this is the expected output. Remember that `y = x * 2`, and `z = x * y`, so $z=2x^2$ and $\frac{dz}{dx} = 4x$, which should be `[[4, 8],[12, 16]]`. Let check the automatically computed results
+Now, let’s see if this is the expected output. Note that $y=2x^2$ and $\frac{dy}{dx} = 4x$, which should be `[[4, 8],[12, 16]]`. Let check the automatically computed results
 
 ```{.python .input  n=9}
 x.grad
