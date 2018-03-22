@@ -22,7 +22,7 @@ Then initialize its weights with the default initialization method, which draws 
 layer.initialize()
 ```
 
-We create a $(3,4)$ shape random input `x` and feed into the layer to compute the output. This is often called a forward pass in neural network. 
+We create a $(3,4)$ shape random input `x` and feed into the layer to compute the output. This is often called a forward pass in neural network.
 
 ```{.python .input  n=4}
 x = nd.random.uniform(-1,1,(3,4))
@@ -35,97 +35,33 @@ As can be seen, we got a $(3,2)$ shape output. Note that we didn't specify the i
 layer.weight.data()
 ```
 
-## Create a neural network flexibly with `nn.Block`
+## Chain layers into a neural network 
 
-To create a network, we can create a subclass of `nn.Block` and implement two methods:
+Let's first consider a simple case that a neural network is a chain of layers. During the forward pass, we run layers sequentially one-by-one. The following codes implement a famous network called [LeNet](http://yann.lecun.com/exdb/lenet/) through `nn.Sequential`.
 
-- `__init__` create the layers
-- `forward` define the forward function.
-
-```{.python .input  n=6}
-class LeNet(nn.Block):
-    def __init__(self, **kwargs):
-        # invoke nn.Block's __init__ method
-        super(LeNet, self).__init__(**kwargs)
-        # In order to save/load parameters to/from disks, layers 
-        # from the nn package needs to be created within a name 
-        # scope. 
-        with self.name_scope():
-            # Simliar to Dense, no necessary to specify 
-            # the input channels by the argument `in_channels`, 
-            # which will be automatically inferred in the first time 
-            # invoke `forward`
-            #
-            # In additional, one can use a tuple to specify a 
-            # non-square kernel size, such as `kernel_size=(2,4)`
-            self.conv1 = nn.Conv2D(channels=6, kernel_size=5)
-            # One can also use a tuple to specify non-symmetric 
-            # pool and stide sizes
-            self.pool1 = nn.MaxPool2D(pool_size=2, strides=2)
-            self.conv2 = nn.Conv2D(channels=16, kernel_size=3)
-            self.pool2 = nn.MaxPool2D(pool_size=2, strides=2)
-            self.dense1 = nn.Dense(120)
-            self.dense2 = nn.Dense(84)
-            self.dense3 = nn.Dense(10)
-            
-    # x is an array with NDArray type
-    def forward(self, x):
-        # Note we used the relu operator in the nd package. Any other 
-        # function in this package can be used as well.
-        y = self.pool1(nd.relu(self.conv1(x)))
-        # Since it is purely imperative, we can get 
-        # results immediatly. Such as inserting `print(y)` will print 
-        # the intermediate results.  
-        y = self.pool2(nd.relu(self.conv2(y)))
-        # flattern the 4-D input into 2-D with shape 
-        # `(y.shape[0], y.size/y.shape[0])` 
-        y = nd.flatten(y)
-        y = nd.relu(self.dense1(y))
-        y = nd.relu(self.dense2(y))
-        y = self.dense3(y)
-        return y
-    
-net = LeNet()
-net    
-```
-
-The usage of `LeNet` is similar to `nn.Dense`. In fact, `nn.Dense` is a subclass of `nn.Block` as well. The following codes show how to create an instance, initialize the weights and run the forward method.
-
-```{.python .input  n=8}
-net.initialize()
-# Input shape is (batch_size, RGB_channels, height, width)
-x = nd.random.uniform(-1, 1, (4,1,28,28))
-# Equal to call `net.forward(x)`
-y = net(x)
-y.shape
-```
-
-Access the first convolution layer's weight and first dense layer's bias.
-
-```{.python .input  n=11}
-(net.conv1.weight.data().shape, 
- net.dense1.bias.data().shape)
-```
-
-## A shorter way with `nn.Sequential`
-
-We have the freedom to write a complex forward function with the `nn.Block` approach, including using arbitrary functions in the `nd` package, printing intermediate results, and using Python's control flow such as `if-else` and `for`.
-
-If the network forward function is simply invoking the layers one-by-one, we can use `nn.Sequential` to make the codes shorter. Let's reimplement the above `LeNet`.
-
-```{.python .input  n=13}
+```{.python .input}
 net = nn.Sequential()
-# Creating layers in a name scope.
+# Creating layers in a name scope to assign each layer a unique
+# name so we can load/save their parameters later.
 with net.name_scope():
-    # Chain a sequence of layers. Note that we can only add 
-    # subclass of `nn.Block`, which includes all layers in the `nn` package.
+    # Add a sequence of layers. 
     net.add(
-        # We absorb the activation layer into Conv2D
+        # Simliar to Dense, no necessary to specify the input 
+        # channels by the argument `in_channels`, which will be 
+        # automatically inferred in the first forward pass. Also,
+        # we apply a relu activation on the output. 
+        #
+        # In additional, we can use a tuple to specify a 
+        # non-square kernel size, such as `kernel_size=(2,4)`
         nn.Conv2D(channels=6, kernel_size=5, activation='relu'),
+        # One can also use a tuple to specify non-symmetric 
+        # pool and stide sizes
         nn.MaxPool2D(pool_size=2, strides=2),
         nn.Conv2D(channels=16, kernel_size=3, activation='relu'),
         nn.MaxPool2D(pool_size=2, strides=2),
-        # Use the Fattern function in the `nn` package  
+        # flattern the 4-D input into 2-D with shape 
+        # `(x.shape[0], x.size/x.shape[0])` so that it can be used
+        # by the following dense layers
         nn.Flatten(),        
         nn.Dense(120, activation="relu"),
         nn.Dense(84, activation="relu"),
@@ -134,49 +70,64 @@ with net.name_scope():
 net
 ```
 
-`nn.Sequential` will automatically generate a `forward` method that calls the added layers sequentially.
+The usage of `nn.Sequential` is similar to `nn.Dense`. In fact, both of them are subclasses of `nn.Block`. The following codes show how to initialize the weights and run the forward pass. 
 
-```{.python .input  n=14}
+```{.python .input}
 net.initialize()
+# Input shape is (batch_size, RGB_channels, height, width)
+x = nd.random.uniform(shape=(4,1,28,28))
 y = net(x)
 y.shape
 ```
 
-We can use `[]` to index a particular layer
-
-```{.python .input  n=15}
-(net[0], net[-1])
-```
-
-## A mixed approach
-
-In Gluon, no matter it is a single layer such as `nn.Dense`, or a complete neural network such as `net`, it shares the same base class `nn.Block`. We can flexibly glue them together. For example, the following example shows that how we can construct a neural work with a mixed usage of `nn.Block` and `nn.Sequential`.
+We can use `[]` to index a particular layer. For example, 
+access the first convolution layer's weight and first dense layer's bias.
 
 ```{.python .input}
+(net[0].weight.data().shape, net[5].bias.data().shape)
+```
+
+## Create a neural network flexibly
+
+In `nn.Sequential`, MXNet will automatically construct the forward function that sequentially executes added layers.  
+Now let's introduce another way to construct a network with flexible forward function. 
+
+To do it, we create a subclass of `nn.Block` and implement two methods:
+
+- `__init__` create the layers
+- `forward` define the forward function.
+
+```{.python .input  n=6}
 class MixMLP(nn.Block):
     def __init__(self, **kwargs):
+        # Run `nn.Block`'s init method
         super(MixMLP, self).__init__(**kwargs)
         with self.name_scope():
-            # `nn.Sequential` is a subclass of `nn.Block`, it will 
-            # be reconginzed by Gluon
             self.blk = nn.Sequential()
             # Already within a name scope, no need to create
             # another scope.
             self.blk.add(
-                nn.Dense(10, activation='relu'),
-                nn.Dense(20, activation='relu')
+                nn.Dense(3, activation='relu'),
+                nn.Dense(4, activation='relu')
             )
-            self.dense = nn.Dense(30)
+            self.dense = nn.Dense(5)
     def forward(self, x):
-        return self.dense(nd.relu(self.blk(x)))
+        y = nd.relu(self.blk(x))
+        print(y)
+        return self.dense(y)
 
-net = nn.Sequential()
-with net.name_scope():
-    net.add(
-        nn.Dense(5),
-        # `add` supports any subclass of `nn.Block`
-        MixMLP(),
-        nn.Dense(8)
-    )
+net = MixMLP()
 net
 ```
+
+In the sequential chaining approach, we can only add instances with `nn.Block` as the base class and then run them in a forward pass. In this example, we used `print` to get the intermediate results and `nd.relu` to apply relu activation. So this approach provides a more flexible way to define the forward function. 
+
+The usage of `net` is similar as before.
+
+```{.python .input}
+net.initialize()
+x = nd.random.uniform(shape=(2,2))
+net(x)
+```
+
+Finally, let's access a particular layer's weight
