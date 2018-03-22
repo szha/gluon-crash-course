@@ -26,31 +26,31 @@ X, y = mnist_train[0]
 
 Each example in this dataset is a $28\times 28$ size gray image, which is presented as NDArray with shape format `(height, width, channel)`.  The label is a `numpy` scalar.
 
-Next, we visualize the first 10 examples.
+Next, we visualize the first 6 examples.
 
 ```{.python .input  n=3}
-X, y = mnist_train[0:9]
-# plot images
-_, figs = plt.subplots(1, X.shape[0], figsize=(15, 15))
-for f,x in zip(figs, X):
-    # 3D->2D by removing the last channel dim
-    f.imshow(x.reshape((28,28)).asnumpy())
-    f.axes.get_xaxis().set_visible(False)
-    f.axes.get_yaxis().set_visible(False)
-plt.show()
-# show labels
 text_labels = [
     't-shirt', 'trouser', 'pullover', 'dress,', 'coat',
     'sandal', 'shirt', 'sneaker', 'bag', 'ankle boot'
 ]
-print([text_labels[int(i)] for i in y])
+X, y = mnist_train[0:6]
+# plot images
+_, figs = plt.subplots(1, X.shape[0], figsize=(15, 15))
+for f,x,yi in zip(figs, X,y):
+    # 3D->2D by removing the last channel dim
+    f.imshow(x.reshape((28,28)).asnumpy())
+    f.axes.set_title(text_labels[int(yi)])
+    f.axes.get_xaxis().set_visible(False)
+    f.axes.get_yaxis().set_visible(False)
+plt.show()
 ```
 
 `FashionMNIST` is a subclass of `gluon.data.Dataset`, which defines how to get the `i`-th example. In order to use it in training, we need to get a (randomized) batch of examples. It can be easily done by `gluon.data.DataLoader`.
 
 ```{.python .input  n=19}
 batch_size = 256
-train_data = gluon.data.DataLoader(mnist_train, batch_size, shuffle=True)
+train_data = gluon.data.DataLoader(
+    mnist_train, batch_size, shuffle=True)
 ```
 
 The returned `train_data` is an iterator that yields a pair of batched data and labels each time.
@@ -65,7 +65,8 @@ Finally, we create a validation dataset and data loader.
 
 ```{.python .input}
 mnist_valid = gluon.data.vision.FashionMNIST(train=False)
-valid_data = gluon.data.DataLoader(mnist_valid, batch_size, shuffle=False)
+valid_data = gluon.data.DataLoader(
+    mnist_valid, batch_size, shuffle=False)
 ```
 
 ## Define the model
@@ -116,7 +117,8 @@ def acc(output, label):
 def transform(data, label):
     # data: (batch, height, weight, channel) ndarray
     # label: (batch, ) ndarray
-    return data.transpose((0,3,1,2)).astype('float32')/255, label.astype('float32')
+    return (data.transpose((0,3,1,2)).astype('float32')/255, 
+            label.astype('float32'))
 ```
 
 Now we can implement the complete training loop.
@@ -143,7 +145,8 @@ for epoch in range(10):
         data, label = transform(data, label)
         valid_acc += acc(net(data), label)
 
-    print("Epoch %d: Loss: %.3f, Train acc %.3f, Test acc %.3f, Time %.1f sec" % (
+    print("Epoch %d: Loss: %.3f, Train acc %.3f, Test acc %.3f,\
+Time %.1f sec" % (
         epoch, train_loss/len(train_data),
         train_acc/len(train_data),
         valid_acc/len(valid_data), time()-tic))
