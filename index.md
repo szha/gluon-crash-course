@@ -11,9 +11,6 @@ neural networks. Otherwise please refer to
 [this excellent hands-on tutorials](http://gluon.mxnet.io/) to learn deep
 learning from scratch.
 
-Contents of this course:
-
-
 ```eval_rst
 
 .. toctree::
@@ -27,7 +24,6 @@ Contents of this course:
    predict
    use_gpus
 ```
-
 
 You may also obtain the [PDF](gluon_crash_course.pdf) version here. The packed
 notebooks are available in both [zip](gluon_crash_course.zip) and
