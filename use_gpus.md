@@ -79,11 +79,11 @@ x = nd.random.uniform(shape=(1,1,28,28), ctx=gpu(0))
 net(x)
 ```
 
-## Multi-GPU training
+## Multi-GPU training (advance)
 
 Finally, we show how to use multiple GPUs to jointly train a neural network through data parallelism. Assume there is *n* GPUs, we then split each data batch into *n* parts, and each GPU will run the forward and backward using one part data. 
 
-Let's first copy the data definition and transform from the previous tutorial. 
+Let's first copy the data definition and transform from the previous tutorial.
 
 ```{.python .input}
 batch_size = 256
@@ -98,7 +98,7 @@ def transform(data, label):
     return data.transpose((0,3,1,2)).astype('float32')/255, label.astype('float32')
 ```
 
-The training loop is quite similar to that we introduced before. Major differences are highlighted in the codes. 
+The training loop is quite similar to that we introduced before. Major differences are highlighted in the codes.
 
 ```{.python .input}
 # Diff 1: Use two GPUs for training.
