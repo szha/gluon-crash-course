@@ -64,9 +64,11 @@ text_labels = [
 ]
 for f,x,yi,pyi in zip(figs, X, y, preds):
     f.imshow(x.reshape((28,28)).asnumpy())
-    f.axes.set_title(text_labels[yi]+'\n'+text_labels[pyi])
-    f.axes.get_xaxis().set_visible(False)
-    f.axes.get_yaxis().set_visible(False)
+    ax = f.axes
+    ax.set_title(text_labels[yi]+'\n'+text_labels[pyi])
+    ax.title.set_fontsize(20)
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
 plt.show()
 ```
 
