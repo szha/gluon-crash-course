@@ -39,9 +39,11 @@ _, figs = plt.subplots(1, X.shape[0], figsize=(15, 15))
 for f,x,yi in zip(figs, X,y):
     # 3D->2D by removing the last channel dim
     f.imshow(x.reshape((28,28)).asnumpy())
-    f.axes.set_title(text_labels[int(yi)])
-    f.axes.get_xaxis().set_visible(False)
-    f.axes.get_yaxis().set_visible(False)
+    ax = f.axes
+    ax.set_title(text_labels[int(yi)])
+    ax.title.set_fontsize(20)
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
 plt.show()
 ```
 
