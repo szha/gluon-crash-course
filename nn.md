@@ -131,3 +131,7 @@ net(x)
 ```
 
 Finally, let's access a particular layer's weight
+
+```{.python .input  n=8}
+net.blk[1].weight.data()
+```
