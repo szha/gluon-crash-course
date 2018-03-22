@@ -4,6 +4,8 @@ We train models to get better and better as a function of experience. Usually, g
 
 Before diving deep into the model training, let's go through how MXNet’s autograd package expedites this work by automatically calculating derivatives. 
 
+## Basic usage
+
 Let's first import the `autograd`
 
 ```{.python .input}
