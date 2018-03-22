@@ -79,7 +79,7 @@ x = nd.random.uniform(shape=(1,1,28,28), ctx=gpu(0))
 net(x)
 ```
 
-## Multi-GPU training (advance)
+## [Advanced] Multi-GPU training 
 
 Finally, we show how to use multiple GPUs to jointly train a neural network through data parallelism. Assume there is *n* GPUs, we then split each data batch into *n* parts, and each GPU will run the forward and backward using one part data. 
 
