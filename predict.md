@@ -34,8 +34,6 @@ net.load_params('net.params', ctx=cpu())
 
 ## Predict
 
-sdf 
-asU
 Remember the data transformation we did for training, now we need the same transformation for predicting, except that we assume the data is a single image instead of a batch of images.
 
 ```{.python .input  n=13}
