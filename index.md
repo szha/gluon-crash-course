@@ -11,11 +11,9 @@ When you finish this Gluon crash course, you will have accomplished the followin
 ## Prerequisites
 This course assumes that readers have basic knowledge about machine learning and neural networks.
 
-For a high-level introduction to neural networks, you might find [neuralnetworksanddeeplearning.com](http://neuralnetworksanddeeplearning.com/) helpful.
+For a high-level introduction to neural networks, you might find Andrew Ng's [Coursera class on Neural Networks and Deep Learning](https://www.coursera.org/learn/neural-networks-deep-learning) useful for acquiring the basic neural networking knowledge.
 
-Andrew Ng's [Coursera class on Neural Networks and Deep Learning](https://www.coursera.org/learn/neural-networks-deep-learning) is another good resource for acquiring the basic neural networking knowledge you will need to benefit from this crash course.
-
-Otherwise, please refer to these
+You can also refer to these
 [excellent hands-on tutorials](http://gluon.mxnet.io/) to learn deep learning from scratch.
 
 Some of the material might stray a little too far into advanced mathematics, but don't be concerned. You can still learn to use neural networks and Gluon without a PhD.
