@@ -17,7 +17,7 @@ layer = nn.Dense(2)
 layer
 ```
 
-Then initialize its weights with the default initialization method, which draws random values uniformly from $[-0.7, -0.7]$.
+Then initialize its weights with the default initialization method, which draws random values uniformly from $[-0.7, 0.7]$.
 
 ```{.python .input  n=32}
 layer.initialize()
