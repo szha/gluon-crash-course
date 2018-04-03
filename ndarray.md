@@ -6,9 +6,13 @@ We’ll start by introducing the `NDArray`, MXNet’s primary tool for storing a
 
 To get started, let's import the `ndarray` package (`nd` is shortform) from MXNet.
 
+<!-- we can remove the --pre flag after release 1.2 -->
+
 ```{.python .input  n=1}
-# If MXNet is not installed. Uncomment the following line
-# !pip install mxnet
+# Uncomment the following line to install the latest MXNet
+# !pip install --pre mxnet
+# Or use the following version to accelerate Intel CPU performance.
+# !pip install --pre mxnet-mkl
 
 from mxnet import nd
 ```
