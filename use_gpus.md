@@ -14,6 +14,7 @@ First, make sure you have at least one Nvidia GPU in your machine and CUDA prope
 
 from mxnet import nd, gpu, gluon, autograd
 from mxnet.gluon import nn
+from mxnet.gluon.data.vision import datasets, transforms
 from time import time
 ```
 
@@ -87,15 +88,19 @@ Let's first copy the data definitions and the transform function from the [previ
 
 ```{.python .input}
 batch_size = 256
-mnist_train = gluon.data.vision.FashionMNIST(train=True)
-mnist_valid = gluon.data.vision.FashionMNIST(train=False)
-valid_data = gluon.data.DataLoader(
-    mnist_valid, batch_size, shuffle=False)
-train_data = gluon.data.DataLoader(
-    mnist_train, batch_size, shuffle=True)
 
-def transform(data, label):
-    return data.transpose((0,3,1,2)).astype('float32')/255, label.astype('float32')
+transformer = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(0.13, 0.31)])
+
+train_data = gluon.data.DataLoader(
+    datasets.FashionMNIST(train=True).transform_first(transformer),
+    batch_size, shuffle=True, num_workers=4)
+
+valid_data = gluon.data.DataLoader(
+    datasets.FashionMNIST(train=False).transform_first(transformer),
+    batch_size, shuffle=False, num_workers=4)
+
 ```
 
 The training loop is quite similar to what we introduced before. The major differences are highlighted in the following code.
@@ -116,8 +121,6 @@ for epoch in range(10):
     train_loss = 0.
     tic = time()
     for data, label in train_data:
-        data, label = transform(data, label)
-
         # Diff 3: split batch and load into corresponding devices
         data_list = gluon.utils.split_and_load(data, devices)
         label_list = gluon.utils.split_and_load(label, devices)
