@@ -8,8 +8,9 @@ Please run the [previous tutorial](train.md) to train the network and save its p
 
 ```{.python .input  n=1}
 from mxnet import nd
-from mxnet import gluon, cpu
+from mxnet import gluon
 from mxnet.gluon import nn
+from mxnet.gluon.data.vision import datasets, transforms
 import matplotlib.pyplot as plt
 ```
 
@@ -30,22 +31,20 @@ with net.name_scope():
     )
 ```
 
-**Note**: There is an advanced way to save the network definition and load it back without redefining the network. Refer to [xx] for more details.
-
 In the last section, we saved all parameters into a file, now let's load it back.
 
 ```{.python .input  n=3}
-net.load_params('net.params', ctx=cpu())
+net.load_params('net.params')
 ```
 
 ## Predict
 
-Remember the data transformation we did for training? Now we need the same transformation for predicting, except that we assume the data is a single image instead of a batch of images.
+Remember the data transformation we did for training? Now we need the same transformation for predicting.
 
 ```{.python .input  n=4}
-def transform(data):
-    # data: (height, weight, channel) ndarray
-    return data.transpose((2,0,1)).expand_dims(axis=0).astype('float32')/255
+transformer = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(0.13, 0.31)])
 ```
 
 Now let's try to predict the first six images in the validation dataset and store the predictions into `preds`.
@@ -53,10 +52,10 @@ Now let's try to predict the first six images in the validation dataset and stor
 ```{.python .input  n=5}
 mnist_valid = gluon.data.vision.FashionMNIST(train=False)
 X, y = mnist_valid[:6]
-
-preds = []
+preds = []  
 for x in X:
-    pred = net(transform(x)).argmax(axis=1)
+    x = transformer(x).expand_dims(axis=0)
+    pred = net(x).argmax(axis=1)
     preds.append(pred.astype('int32').asscalar())
 ```
 
@@ -103,7 +102,9 @@ with open(fname, 'r') as f:
 We randomly pick a dog image from Wikipedia as a test image, download and read it.
 
 ```{.python .input  n=9}
-url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Golden_Retriever_medium-to-light-coat.jpg/365px-Golden_Retriever_medium-to-light-coat.jpg'
+url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/\
+Golden_Retriever_medium-to-light-coat.jpg/\
+365px-Golden_Retriever_medium-to-light-coat.jpg'
 fname = download(url)
 x = image.imread(fname)
 ```
