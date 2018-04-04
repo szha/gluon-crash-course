@@ -50,7 +50,7 @@ transformer = transforms.Compose([
 Now let's try to predict the first six images in the validation dataset and store the predictions into `preds`.
 
 ```{.python .input  n=5}
-mnist_valid = gluon.data.vision.FashionMNIST(train=False)
+mnist_valid = datasets.FashionMNIST(train=False)
 X, y = mnist_valid[:6]
 preds = []  
 for x in X:
