@@ -29,7 +29,6 @@ For instructions on running the Jupyter notebooks included with this course, ple
 .. toctree::
    :maxdepth: 1
    :numbered:
-   :caption: Crash course
 
    ndarray
    nn
@@ -46,7 +45,6 @@ For instructions on running the Jupyter notebooks included with this course, ple
 .. toctree::
    :maxdepth: 1
    :numbered:
-   :caption: Appendix
 
    mxnet_packages
    use_aws
