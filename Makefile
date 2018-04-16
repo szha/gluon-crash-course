@@ -9,7 +9,7 @@ build/%: %
 MARKDOWN = index.md mxnet_packages.md use_gpus.md
 NOTEBOOK = ndarray.md nn.md autograd.md train.md predict.md use_gpus.md
 
-OBJ = $(patsubst %.md, build/%.md, $(MARKDOWN))
+OBJ = $(patsubst %.md, build/%.md, $(MARKDOWN)) \
 	$(patsubst %.md, build/%.ipynb, $(NOTEBOOK))
 
 # ORIGN_DEPS = $(wildcard img/* data/*) environment.yml utils.py README.md
