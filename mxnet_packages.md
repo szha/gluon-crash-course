@@ -34,12 +34,18 @@ version, users should have [CUDA](https://developer.nvidia.com/cuda-downloads)
 installed first. Then according to the CUDA version, which can be checked by
 `nvcc --version`, to select the proper package.
 
-| CUDA version |  MXNet package |
-| --- | --- |
-| 7.5 | `mxnet-cu75` |
-| 8.0 | `mxnet-cu80` |
-| 9.0 | `mxnet-cu90` |
-| 9.1 | `mxnet-cu91` |
+```eval_rst
+
+============  ===============
+CUDA version  MXNet package
+============  ===============
+7.5           ``mxnet-cu75``
+8.0           ``mxnet-cu80``
+9.0           ``mxnet-cu90``
+9.1           ``mxnet-cu91``
+============  ===============
+
+```
 
 All `cu` packages ship `cudnn` in default, there is no need to install it
 separately.
@@ -71,12 +77,19 @@ to `mxnet` if your programs are failed to run.
 
 We can have both hardware accelerated:
 
-| CUDA version | MXNet package |
-| --- | --- |
-| 7.5 | `mxnet-cu75mkl` |
-| 8.0 | `mxnet-cu80mkl` |
-| 9.0 | `mxnet-cu90mkl` |
-| 9.1 | `mxnet-cu91mkl` |
+
+```eval_rst
+
+============  ==================
+CUDA version  MXNet package
+============  ==================
+7.5           ``mxnet-cu75mkl``
+8.0           ``mxnet-cu80mkl``
+9.0           ``mxnet-cu90mkl``
+9.1           ``mxnet-cu91mkl``
+============  ==================
+
+```
 
 ## Upgrade to the newest version
 

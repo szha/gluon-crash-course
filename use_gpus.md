@@ -2,7 +2,10 @@
 
 We often use GPUs to train and deploy neural networks, because it offers significant more computation power compared to CPUs. In this tutorial we will introduce how to use GPUs with MXNet.
 
-First, make sure you have at least one Nvidia GPU in your machine and CUDA properly installed. Other GPUs such as AMD and Intel GPUs are not supported yet. Then be sure you have [installed the GPU-enabled version of MXNet](http://mxnet.incubator.apache.org/install/index.html).
+First, make sure you have at least one Nvidia GPU in your machine and CUDA
+properly installed. Other GPUs such as AMD and Intel GPUs are not supported
+yet. Then be sure you have
+[installed the GPU-enabled version of MXNet](mxnet_packages.md).
 
 ```{.python .input  n=15}
 # If you pip installed the plain `mxnet` before, uncomment the
