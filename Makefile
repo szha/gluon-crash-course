@@ -6,7 +6,7 @@ build/%.ipynb: %.md build/build.yml
 build/%: %
 	@cp -r $< $@
 
-MARKDOWN = index.md README.md
+MARKDOWN = index.md README.md mxnet_packages.md use_gpus.md
 NOTEBOOK = ndarray.md nn.md autograd.md train.md predict.md use_gpus.md
 
 OBJ = build/index.md \

@@ -23,11 +23,13 @@ For instructions on running the Jupyter notebooks included with this course, ple
 
 
 ## Contents of this Course
+
 ```eval_rst
 
 .. toctree::
    :maxdepth: 1
    :numbered:
+   :caption: Crash course
 
    ndarray
    nn
@@ -37,6 +39,19 @@ For instructions on running the Jupyter notebooks included with this course, ple
    use_gpus
 ```
 
+## Appendix
+
+```eval_rst
+
+.. toctree::
+   :maxdepth: 1
+   :numbered:
+   :caption: Appendix
+
+   mxnet_packages
+   use_aws
+
+```
 
 ## Downloads
 You may also download the [PDF](gluon_crash_course.pdf) of this material, and packed
