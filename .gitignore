@@ -6,3 +6,4 @@
 *.ipynb
 build/_build/*
 build/*.md
+build/img/

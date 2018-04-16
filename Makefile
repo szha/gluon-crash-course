@@ -4,6 +4,7 @@ build/%.ipynb: %.md build/build.yml
 	cd build; python md2ipynb.py ../$< ../$@
 
 build/%: %
+	@mkdir -p $(@D)
 	@cp -r $< $@
 
 MARKDOWN = index.md mxnet_packages.md use_aws.md
@@ -12,9 +13,8 @@ NOTEBOOK = ndarray.md nn.md autograd.md train.md predict.md use_gpus.md
 OBJ = $(patsubst %.md, build/%.md, $(MARKDOWN)) \
 	$(patsubst %.md, build/%.ipynb, $(NOTEBOOK))
 
-# ORIGN_DEPS = $(wildcard img/* data/*) environment.yml utils.py README.md
-# DEPS = $(patsubst %, build/%, $(ORIGN_DEPS))
-DEPS =
+ORIGN_DEPS = $(wildcard img/*) README.md
+DEPS = $(patsubst %, build/%, $(ORIGN_DEPS))
 
 PKG = build/_build/html/gluon_crash_course.tar.gz build/_build/html/gluon_crash_course.zip
 
